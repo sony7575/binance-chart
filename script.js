@@ -22,12 +22,14 @@ let chart = new Chart(ctx, {
 
 async function fetchPrice() {
   try {
-    const res = await fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=30');
+    const proxyUrl = 'https://api.allorigins.win/raw?url=';
+    const binanceUrl = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=30';
+    const res = await fetch(proxyUrl + encodeURIComponent(binanceUrl));
     const data = await res.json();
 
     const labels = data.map(item => {
       const date = new Date(item[0]);
-      return `${date.getHours()}:${date.getMinutes()}`;
+      return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
     });
 
     const prices = data.map(item => parseFloat(item[4]));
